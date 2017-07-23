@@ -24,10 +24,10 @@ public:
 
 
 
-        const Sub* RealSysBlock;
-        const Sub* RealEnvBlock;
-        const Sub* RealMBlock;
-        const Sub* RealNBlock;
+        const Sub& RealSysBlock;
+        const Sub& RealEnvBlock;
+        const Sub& RealMBlock;
+        const Sub& RealNBlock;
 
 
         QWave Wave, tempWave;

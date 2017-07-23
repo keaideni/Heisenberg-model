@@ -2,7 +2,7 @@
 #include <ctime>
 
 
-Super::Super(){}
+
 
 
 Super::~Super()
@@ -15,7 +15,11 @@ Super::~Super()
 
 
 
-Super::Super(const Parameter& para_, const Sub& sys, const Sub& m, const Sub& n, const Sub& env, const int& TotQ)
+Super::Super(const Parameter& para_, const Sub& sys, const Sub& m, const Sub& n, const Sub& env, const int& TotQ):
+RealSysBlock(sys),
+RealMBlock(m),
+RealNBlock(n),
+RealEnvBlock(env)
 {
         Wave.Initial(sys.SubSysEye(), m.SubSysEye(), n.SubSysEye(), env.SubSysEye(), TotQ);
         SaveWave = Wave;
@@ -24,15 +28,12 @@ Super::Super(const Parameter& para_, const Sub& sys, const Sub& m, const Sub& n,
 
         Dim = Wave.getDim();
 
-        RealSysBlock = &sys;
-        RealMBlock = &m;
-        RealNBlock = &n;
-        RealEnvBlock = &env;
+        
 }
 
 
 
-void Super::Initial(const Parameter& para_, const Sub& sys, const Sub& m, const Sub& n, const Sub& env, int TotQ)
+/*void Super::Initial(const Parameter& para_, const Sub& sys, const Sub& m, const Sub& n, const Sub& env, int TotQ)
 {
         Wave = QWave(sys.SubSysEye(), m.SubSysEye(), n.SubSysEye(), env.SubSysEye(), TotQ);
         SaveWave = Wave;
@@ -45,7 +46,7 @@ void Super::Initial(const Parameter& para_, const Sub& sys, const Sub& m, const 
         RealMBlock = &m;
         RealNBlock = &n;
         RealEnvBlock = &env;
-}
+}*/
 
 
 
@@ -90,24 +91,24 @@ void Super::OneStep()
 
         OP p1, p2;
         //=========the term have no relationship to the boundary condition========
-        Wave.OPWave(SaveWave, RealSysBlock->SubSys(), 1);//sys
+        Wave.OPWave(SaveWave, RealSysBlock.SubSys(), 1);//sys
 
-        Wave.OPWave(SaveWave, RealMBlock->SubSys(), 2);//M
+        Wave.OPWave(SaveWave, RealMBlock.SubSys(), 2);//M
 
-        Wave.OPWave(SaveWave, RealNBlock->SubSys(), 3);//N
+        Wave.OPWave(SaveWave, RealNBlock.SubSys(), 3);//N
 
-        Wave.OPWave(SaveWave, RealEnvBlock->SubSys(), 4);//env
+        Wave.OPWave(SaveWave, RealEnvBlock.SubSys(), 4);//env
 
 
 
 
         //Sys-M
-        p1.time(0.5, RealSysBlock->SubSysSpinM());
-        p2.time(0.5, RealSysBlock->SubSysSpinP());
-        BlockWave(1, p1, 2, RealMBlock->SubSysSpinP());
-        BlockWave(1, p2, 2, RealMBlock->SubSysSpinM());
+        p1.time(0.5, RealSysBlock.SubSysSpinM());
+        p2.time(0.5, RealSysBlock.SubSysSpinP());
+        BlockWave(1, p1, 2, RealMBlock.SubSysSpinP());
+        BlockWave(1, p2, 2, RealMBlock.SubSysSpinM());
 
-        BlockWave(1, RealSysBlock->SubSysSpinZ(), 2, RealMBlock->SubSysSpinZ());
+        BlockWave(1, RealSysBlock.SubSysSpinZ(), 2, RealMBlock.SubSysSpinZ());
 
 
 
@@ -115,34 +116,34 @@ void Super::OneStep()
         //==================periodic condition=====================
                 
         //M-Env
-        p1.time(0.5, RealMBlock->SubSysSpinM());
-        p2.time(0.5, RealMBlock->SubSysSpinP());
+        p1.time(0.5, RealMBlock.SubSysSpinM());
+        p2.time(0.5, RealMBlock.SubSysSpinP());
 
-        BlockWave(2, p1, 4, RealEnvBlock->SubSysSpinP());
-        BlockWave(2, p2, 4, RealEnvBlock->SubSysSpinM());
+        BlockWave(2, p1, 4, RealEnvBlock.SubSysSpinP());
+        BlockWave(2, p2, 4, RealEnvBlock.SubSysSpinM());
 
-        BlockWave(2, RealMBlock->SubSysSpinZ(), 4, RealEnvBlock->SubSysSpinZ());
+        BlockWave(2, RealMBlock.SubSysSpinZ(), 4, RealEnvBlock.SubSysSpinZ());
 
 
                         
 
         //Env-N
-        p1.time(0.5, RealEnvBlock->SubSysSpinM1());
-        p2.time(0.5, RealEnvBlock->SubSysSpinP1());
+        p1.time(0.5, RealEnvBlock.SubSysSpinM1());
+        p2.time(0.5, RealEnvBlock.SubSysSpinP1());
 
-        BlockWave(4, p1, 3, RealNBlock->SubSysSpinP());
-        BlockWave(4, p2, 3, RealNBlock->SubSysSpinM());
+        BlockWave(4, p1, 3, RealNBlock.SubSysSpinP());
+        BlockWave(4, p2, 3, RealNBlock.SubSysSpinM());
 
-        BlockWave(4, RealEnvBlock->SubSysSpinZ1(), 3, RealNBlock->SubSysSpinZ());
+        BlockWave(4, RealEnvBlock.SubSysSpinZ1(), 3, RealNBlock.SubSysSpinZ());
 
         //N-Sys
-        p1.time(0.5, RealNBlock->SubSysSpinM());
-        p2.time(0.5, RealNBlock->SubSysSpinP());
+        p1.time(0.5, RealNBlock.SubSysSpinM());
+        p2.time(0.5, RealNBlock.SubSysSpinP());
 
-        BlockWave(3, p1, 1, RealSysBlock->SubSysSpinP1());
-        BlockWave(3, p2, 1, RealSysBlock->SubSysSpinM1());
+        BlockWave(3, p1, 1, RealSysBlock.SubSysSpinP1());
+        BlockWave(3, p2, 1, RealSysBlock.SubSysSpinM1());
 
-        BlockWave(3, RealNBlock->SubSysSpinZ(), 1, RealSysBlock->SubSysSpinZ1());
+        BlockWave(3, RealNBlock.SubSysSpinZ(), 1, RealSysBlock.SubSysSpinZ1());
                         
                 
 
@@ -194,13 +195,13 @@ void Super::normalizedCopy(const double* f0)
 void Super::show()
 {
         std::cout << "the System part: " << std::endl;
-        RealSysBlock->show();
+        RealSysBlock.show();
         std::cout << "the M part: " << std::endl;
-        RealMBlock->show();
+        RealMBlock.show();
         std::cout << "the N part: " << std::endl;
-        RealNBlock->show();
+        RealNBlock.show();
         std::cout << "the Env part: " << std::endl;
-        RealEnvBlock->show();
+        RealEnvBlock.show();
         std::cout << "the QWave part: " << std::endl;
         Wave.show();
         std::cout << "Dim = " << Dim << std::endl;
