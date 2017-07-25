@@ -370,8 +370,26 @@ void QWave::Wave2OP(OP& O, const OP& sys, const OP& m, const OP& n, const OP& en
                        tempSQ = (it->first.first + itt->second);
                        tempEQ = (it->first.second + itt->first);
 
-                       startL = startDimS.at(std::pair<int, int>(itt->second, it->first.first));
-                       startR = startDimE.at(std::pair<int, int>(it->first.second, itt->first));
+                       /*startL = startDimS.at(std::pair<int, int>(itt->second, it->first.first));
+                       startR = startDimE.at(std::pair<int, int>(it->first.second, itt->first));*/
+
+                       auto itL=startDimS.find(pair<int, int>(itt->second, it->first.first));
+                       if(itL!=startDimS.end())
+                        {
+                                startL=itL->second;
+                        }else
+                        {
+                                continue;
+                        }
+
+                        auto itR=startDimE.find(pair<int, int>(it->first.second, itt->first));
+                        if(itR!=startDimE.end())
+                        {
+                                startR=itR->second;
+                        }else
+                        {
+                                continue;
+                        }
 
                        break;
 
@@ -382,8 +400,27 @@ void QWave::Wave2OP(OP& O, const OP& sys, const OP& m, const OP& n, const OP& en
                     tempSQ = (itt->second + it->first.second);
                     tempEQ = (itt->first + it->first.first);
 
-                    startL = startDimS.at(std::pair<int, int>(it->first.second, itt->second));
-                    startR = startDimE.at(std::pair<int, int>(itt->first, it->first.first));
+                    /*startL = startDimS.at(std::pair<int, int>(it->first.second, itt->second));
+                    startR = startDimE.at(std::pair<int, int>(itt->first, it->first.first));*/
+                        
+
+                        auto itL=startDimS.find(pair<int, int>(it->first.second, itt->second));
+                        if(itL!=startDimS.end())
+                        {
+                                startL=itL->second;
+                        }else
+                        {
+                                continue;
+                        }
+
+                        auto itR=startDimE.find(pair<int, int>(itt->first, it->first.first));
+                        if(itR!=startDimE.end())
+                        {
+                                startR=itR->second;
+                        }else
+                        {
+                                continue;
+                        }
 
 
                     break;

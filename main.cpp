@@ -6,9 +6,10 @@ int OP::Max;
 
 int main()
 {
-        Parameter para(40, 40, 200, 6);
+        Parameter para;//(40, 40, 200, 6);
+        para.read();
 
-        OP::Max=para.D();
+        OP::Max=para.D()+1;
 
         DMRG Heisenberg(para);
 }

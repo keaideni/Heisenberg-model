@@ -202,10 +202,11 @@ void DMRG::getEnergyP(Parameter& para, int dir)
                 << ",    truncerr = " << std::setprecision(15) << truncerr << std::endl;
 
 
-        /*std::cout << "Q = " << qtot << "    WaveD = " <<std::setw(4)<< Sup.Dim
-        << "      OS ="  <<std::setw(2)<<Sys.Orbital << ",  OE =" <<std::setw(2)<< Env.Orbital
-        << ",    E = " <<std::setw(10)<< std::setprecision(15)<<para.Energy <<",    trace = "<< std::setprecision(15)<<trace
-        <<",    truncerr = "<< std::setprecision(15)<<truncerr<<std::endl;*/
+        std::cout << "Q="<<std::setw(4) << qtot << ",  WaveD=" <<std::setw(8)<< Sup.Dim
+        << ",  OS="  <<std::setw(2)<<Sys.Orbital() << ",  OE=" <<std::setw(2)<< Env.Orbital()
+        << ",  E=" <<std::setw(18)<< std::setprecision(15)<<para.Energy <<",  trace ="<<setw(18)
+        <<std::setprecision(15)<<trace
+        <<",  truncerr="<<setw(20)<< std::setprecision(15)<<truncerr<<std::endl;
         FEnergy = para.Energy;
         FTrace = trace;
         FTruncerr = truncerr;
@@ -274,7 +275,7 @@ void DMRG::SweepP(Parameter& para, int& OS, int& OE, int& dir)
         //para.read();
         FEnergy = 10000000000;
         errEnergy=1;
-        while (errEnergy>0.00001)
+        while (errEnergy>0.0001)
         {
 
                 SaveAll << "the " << (flag + 1) << "th Sweep" << std::endl;
@@ -381,7 +382,7 @@ void DMRG::SweepP(Parameter& para, int& OS, int& OE, int& dir)
 
                         //this one is for the break point at the middle of the line.
 
-                        if((flag == para.SweepNo() -1) &&(OS == (para.LatticeSize() - 2) / 2))
+                        if((errEnergy<0.0001) &&(OS == (para.LatticeSize() - 2) / 2))
                         {
                                 
 
@@ -589,11 +590,11 @@ void DMRG::getEnergySweepP(Parameter& para, int dir)
 
 
 
-        /*std::cout << "Q = " << qtot << ",    E = " << std::setprecision(15)<<Energy <<std::endl
-        << "      OS ="  <<std::setw(2)<<Sys.Orbital << ",  OE =" <<std::setw(2)<< Env.Orbital
-        << "      OrbitalM ="  <<std::setw(2)<<OrbitalM << ",  OrbitalN =" <<std::setw(2)<< OrbitalN
-        <<",    trace = "<< std::setprecision(15)<<trace
-        <<",    truncerr = "<< std::setprecision(15)<<truncerr << std::endl<<std::endl;*/
+        std::cout << "Q=" << qtot << ",  E = " <<setw(18)<< std::setprecision(15)<<Energy <<std::endl
+        << "  OS="  <<std::setw(2)<<Sys.Orbital() << ",  OE=" <<std::setw(2)<< Env.Orbital()
+        << "  OrbitalM ="  <<std::setw(2)<<OrbitalM << ",  OrbitalN=" <<std::setw(2)<< OrbitalN
+        <<",  trace="<<setw(18)<< std::setprecision(15)<<trace
+        <<",  truncerr="<<setw(20)<< std::setprecision(15)<<truncerr << std::endl<<std::endl;
 
         if (Sys.Orbital() == (para.LatticeSize() - 2) / 2)
         {

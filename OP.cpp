@@ -192,12 +192,14 @@ void OP::findDim(const OP& a, const OP& b, std::unordered_map<int, int> &newDim,
                                 if (itc == newDim.end())
                                 {
                                         newDim.insert(std::pair<int, int>(tempQ, ita->second * itb->second));
-                                        startDim[std::pair<int, int>(ita->first, itb->first)] = 0;
+                                        startDim.insert(pair<pair<int, int>, int>(pair<int, int>(ita->first, itb->first),0));
                                 }
                                 else
                                 {
-                                        startDim[std::pair<int, int>(ita->first, itb->first)] = newDim[itc->first];
-                                        newDim[itc->first] += ita->second * itb->second;
+                                        startDim.insert(pair<pair<int, int>, int>(pair<int, int>(ita->first, itb->first),newDim[itc->first]));
+
+                                        //startDim[std::pair<int, int>(ita->first, itb->first)] = newDim[itc->first];
+                                        newDim.at(itc->first) += ita->second * itb->second;
                                 }
                         }
                 }

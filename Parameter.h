@@ -2,6 +2,7 @@
 #define PARAMETER_H
 
 #include <fstream>
+using namespace std; 
 
 class Parameter
 {
@@ -47,6 +48,19 @@ public:
                 _ParticleNo=num;
                 _D=dimension;
                 _SweepNo=sweep;
+        };
+
+        void read()
+        {
+                ifstream infile("./data/Para");
+                if(!infile)
+                {
+                        cerr<<"error: the file /data/Para doesn't exist!"<<endl;
+                        exit(true);
+                }
+                infile>>_LatticeSize>>_ParticleNo>>_D>>_SweepNo;
+                infile.close();
+
         };
 };
 
